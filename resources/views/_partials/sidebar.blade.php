@@ -54,18 +54,18 @@
                     Pembelian
                 </a>
                 <ul class="sub-menu children dropdown-menu">
-                
+
                     <li>
                         <i class="menu-icon fa fa-truck"></i>
                         <a href="{{ route('stock.index') }}">Pembelian</a>
                     </li>
-                    
+
                     @can('isAdmin')
                     <li>
                         <i class="menu-icon fa fa-truck"></i>
                         <a href="{{ route('detail_stock.index') }}">Riwayat Pembelian</a>
                     </li>
-                    
+
                     @endcan
                 </ul>
             </li>
@@ -77,13 +77,13 @@
                     Transaksi
 </a>
 <ul class="sub-menu children dropdown-menu">
-            
+
                     <li>
                         <i class="menu-icon fa fa-money"></i>
                         <a href="{{ route('transaction.index') }}">Transaksi</a>
                     </li>
                     <li>
-                    
+
                     @can('isAdmin')
                         <i class="menu-icon fa fa-money"></i>
                         <a href="{{ route('detail_transaction.index') }}">Riwayat Transaksi</a>
@@ -92,18 +92,20 @@
   </ul>
             </li>
             @endcan
-            @can('isAdmin')
+            @can('isAdminKasir')
             <li class="menu-item-has-children dropdown {{ active('finance', false, 'active') }} {{ active('category_finance', false, 'active') }}">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    
+
                     <i class="menu-icon fa fa-print"></i>
                     Pengeluaran
                 </a>
                 <ul class="sub-menu children dropdown-menu">
+                    @can('isAdmin')
                 <li>
                 <i class="menu-icon fa fa-print"></i>
                             <a href="{{ route('category_finance.index') }}"></i>Kategori Pengeluaran</a>
                         </li>
+                    @endcan
                 <li>
                 <i class="menu-icon fa fa-print"></i>
                             <a href="{{ route('finance.index') }}"></i>Pengeluaran</a>

@@ -125,16 +125,32 @@
 			$(this).removeClass('is-invalid')
 		})
 
+        let debounceTimer;
         $('.transaction-table').on('input', '.price', function () {
-            const newPrice = parseInt(this.value.replace(/\D/g, ''), 10);
-            const { id } = $(this).data();
+            // const newPrice = parseInt(this.value.replace(/\D/g, ''), 10);
+            // const { id } = $(this).data();
 
-            if (newPrice && newPrice > 0) {
-                Livewire.emit('update-price', id, newPrice);
-            } else {
-                $(this).addClass('is-invalid');
-                $(this).siblings('.invalid-feedback').html('Harga tidak valid');
-            }
+            // if (newPrice && newPrice > 0) {
+            //     Livewire.emit('update-price', id, newPrice);
+            // } else {
+            //     $(this).addClass('is-invalid');
+            //     $(this).siblings('.invalid-feedback').html('Harga tidak valid');
+            // }
+
+            clearTimeout(debounceTimer);
+    const $input = $(this);
+    debounceTimer = setTimeout(() => {
+        const newPrice = parseInt($input.val().replace(/\D/g, ''), 10);
+        const { id } = $input.data();
+
+        if (newPrice && newPrice > 0) {
+            Livewire.emit('update-price', id, newPrice);
+            $input.removeClass('is-invalid');
+        } else {
+            $input.addClass('is-invalid');
+            $input.siblings('.invalid-feedback').html('Harga tidak valid');
+        }
+    }, 500);
         });
 
         $('.transaction-table').on('focusout', '.price', function () {

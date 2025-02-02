@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function ()
 {
 	Route::get('/', 'HomeController@index')->name('home')->middleware('dashboard');
-	
+
 	Route::patch('/change_password', 'UserController@updatePassword')->name('change_password');
 	Route::view('/change_password', 'change_password');
 
@@ -71,22 +71,22 @@ Route::middleware('auth')->group(function ()
 
 		Route::prefix('/transaction')->name('transaction.')->group(function ()
 		{
-			Route::get('/printall', 'TransactionController@printAll')->name('printall');			
-			Route::get('/export', 'TransactionController@export')->name('export');			
-			Route::post('/import', 'TransactionController@import')->name('import');			
+			Route::get('/printall', 'TransactionController@printAll')->name('printall');
+			Route::get('/export', 'TransactionController@export')->name('export');
+			Route::post('/import', 'TransactionController@import')->name('import');
 			Route::delete('/destroy/{id}', 'TransactionController@destroy')->name('destroy');
 		});
 
 		Route::prefix('/detail_transaction')->name('detail_transaction.')->group(function ()
 		{
-			Route::get('/', 'TransactionController@detailTransaction')->name('index');		
+			Route::get('/', 'TransactionController@detailTransaction')->name('index');
 			Route::get('/printall', 'TransactionController@detailPrintall')->name('printall');
 			Route::get('/export', 'TransactionController@detailExport')->name('export');
 			Route::post('/import', 'TransactionController@detailImport')->name('import');
 			Route::post('/datatables', 'TransactionController@detailDatatables')->name('datatables');
 		});
 
-	
+
 		Route::prefix('/setting')->name('setting.')->group(function ()
 		{
 			Route::put('/', 'SettingController@update')->name('update');
@@ -96,7 +96,7 @@ Route::middleware('auth')->group(function ()
 
 	Route::middleware('can:isAdminGudang')->group(function ()
 	{
-	
+
 		Route::get('/notification', 'HomeController@notification')->name('notification');
 
 		Route::prefix('/barcode')->name('barcode.')->group(function ()
@@ -129,7 +129,7 @@ Route::middleware('auth')->group(function ()
 			Route::post('/datatables', 'RackController@datatables')->name('datatables');
 			Route::post('/select', 'RackController@select')->name('select');
 		});
-		
+
 		Route::prefix('/distributor')->name('distributor.')->group(function ()
 		{
 			Route::get('/export', 'DistributorController@export')->name('export');
@@ -141,31 +141,17 @@ Route::middleware('auth')->group(function ()
 		Route::prefix('/stock')->name('stock.')->group(function ()
 		{
 			Route::get('/', 'StockController@index')->name('index');
-			
+
 			Route::view('/create', 'stock.create')->name('create');
 			Route::view('/edit/{id}', 'stock.edit')->name('edit');
 
 			Route::get('/detail/{id}', 'StockController@detail')->name('detail');
 			Route::get('/print/{id}', 'StockController@print')->name('print');
 
-			Route::post('/datatables', 'StockController@datatables')->name('datatables');			
-		});
-
-		Route::prefix('/finance')->name('finance.')->group(function ()
-		{
-			Route::get('/printall', 'FinanceController@printall')->name('printall');
-			Route::get('/export', 'FinanceController@export')->name('export');
-			Route::post('/import', 'FinanceController@import')->name('import');
-			Route::post('/datatables', 'FinanceController@datatables')->name('datatables');
-		});
-
-		Route::prefix('/category_finance')->name('category_finance.')->group(function ()
-		{
-			Route::post('/datatables', 'CategoryFinanceController@datatables')->name('datatables');
-			Route::post('/select', 'CategoryFinanceController@select')->name('select');
+			Route::post('/datatables', 'StockController@datatables')->name('datatables');
 		});
 	});
-	
+
 	Route::middleware('can:isAdminKasir')->group(function ()
 	{
 
@@ -173,13 +159,28 @@ Route::middleware('auth')->group(function ()
 		{
 			Route::get('/', 'TransactionController@index')->name('index');
 			Route::view('/create', 'transaction.create')->name('create');
-			
+
 			Route::post('/datatables', 'TransactionController@datatables')->name('datatables');
-			
+
 			Route::get('/detail/{id}', 'TransactionController@detail')->name('detail');
 			Route::get('/print/{id}', 'TransactionController@print')->name('print');
 			Route::patch('/cancel/{id}', 'TransactionController@cancel')->name('cancel');
 		});
+
+        Route::prefix('/finance')->name('finance.')->group(function ()
+		{
+			Route::get('/printall', 'FinanceController@printall')->name('printall');
+			Route::get('/export', 'FinanceController@export')->name('export');
+			Route::post('/import', 'FinanceController@import')->name('import');
+			Route::post('/datatables', 'FinanceController@datatables')->name('datatables');
+		});
+
+        Route::prefix('/category_finance')->name('category_finance.')->group(function ()
+		{
+			Route::post('/datatables', 'CategoryFinanceController@datatables')->name('datatables');
+			Route::post('/select', 'CategoryFinanceController@select')->name('select');
+		});
+
 
 	});
 
@@ -188,7 +189,7 @@ Route::middleware('auth')->group(function ()
 		Route::post('/datatables', 'StuffController@datatables')->name('datatables');
 		Route::post('/select', 'StuffController@select')->name('select');
 	});
-	
+
 	Route::prefix('/report')->name('report.')->group(function ()
 	{
 		Route::middleware('can:isAdmin')->group(function ()
@@ -240,7 +241,7 @@ Route::middleware('auth')->group(function ()
 	Route::resource('/distributor', 'DistributorController')->except(['edit', 'show'])->middleware('can:isAdminGudang');
 	Route::resource('/stuff', 'StuffController')->except(['edit'])->except(['edit'])->middleware('can:isAdminGudang');
 	Route::resource('/user', 'UserController')->except(['edit', 'show'])->middleware('can:isAdmin');
-	Route::resource('/finance', 'FinanceController')->except(['create', 'edit', 'show'])->middleware('can:isAdmin');
+	Route::resource('/finance', 'FinanceController')->except(['create', 'edit', 'show'])->middleware('can:isAdminKasir');
 	Route::resource('/category_finance', 'CategoryFinanceController')->except(['create', 'edit', 'show'])->middleware('can:isAdmin');
 	Route::resource('/opname', 'OpnameController')->except(['show', 'update'])->middleware('can:isAdmin');
 });
@@ -249,6 +250,6 @@ Route::namespace('Auth')->group(function ()
 {
 	Route::get('/login', 'LoginController@showLoginForm');
 	Route::post('/login', 'LoginController@login')->name('login');
-	
+
 	Route::get('/logout', 'LoginController@logout')->name('logout');
 });

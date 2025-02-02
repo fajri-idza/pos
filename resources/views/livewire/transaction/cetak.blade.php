@@ -71,7 +71,7 @@
         </table>
     </div>
     <div class="modal-footer">
-        <a href="{{ route('transaction.print', ['id' => $transaction->idPenjualan,  'bayar' => $bayar]) }}" type="button" class="btn btn-primary" target="_blank">Print</a>
+        <a href="{{ route('transaction.print', ['id' => $transaction->idPenjualan,  'bayar' => $bayar]) }}" type="button" class="btn btn-primary">Print</a>
         <button type="button" data-dismiss="modal" class="btn btn-secondary">Kembali</button>
     </div>
     @endif

@@ -38,7 +38,7 @@
 		}
 	</style>
 </head>
-<body>
+<body style="margin-left: 27px">
 
 <div class="heading">
 		@if (site('pakaiLogo'))
