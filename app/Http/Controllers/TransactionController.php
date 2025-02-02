@@ -94,7 +94,7 @@ class TransactionController extends Controller
             $printer->setTextSize(1, 1);
             $printer->text(site('alamat_toko') . "\n");
             $printer->text(site('telepon_toko') . "\n");
-            $printer->text("--------------------------------\n");
+            $printer->text("================================\n");
 
             // **4. Print Informasi Transaksi**
             $printer->setJustification(Printer::JUSTIFY_LEFT);
@@ -121,22 +121,17 @@ class TransactionController extends Controller
             $printer->text("--------------------------------\n");
 
             // **6. Print Total Harga**
-            $printer->setJustification(Printer::JUSTIFY_RIGHT);
+            $printer->setJustification(Printer::JUSTIFY_LEFT);
             $printer->text("Total    : Rp. " . number_format($total) . "\n");
             $printer->text("PPN      : Rp. " . number_format($transaction->ppn) . "\n");
             $printer->text("Subtotal : Rp. " . number_format($total + $transaction->ppn) . "\n");
             $printer->text("Bayar    : Rp. " . number_format($bayar) . "\n");
             $printer->text("Kembali  : Rp. " . number_format(max($bayar - ($total + $transaction->ppn), 0)) . "\n");
 
-            $printer->text("--------------------------------\n");
+            $printer->text("================================\n");
 
             // **7. Print Footer**
             $printer->setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text("BKP : " . number_format($total) . "\n");
-            $printer->text("DISC: " . number_format($disc) . "\n");
-            $printer->text("DPP : " . number_format($total + $transaction->ppn) . "\n");
-            $printer->text("PPN : " . number_format($transaction->ppn) . "\n");
-            $printer->feed(2);
 
             $printer->text("Instagram : \n");
             $printer->text("@bengkulu_guitar\n");
