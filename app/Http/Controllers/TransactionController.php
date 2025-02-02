@@ -138,12 +138,15 @@ class TransactionController extends Controller
             $printer->text("PPN : " . number_format($transaction->ppn) . "\n");
             $printer->feed(2);
 
+            $printer->text("Instagram : \n");
+            $printer->text("@bengkulu_guitar\n");
+            $printer->text("@bengkulupro_audio \n");
+            $printer->text("\n");
             $printer->text("Terima Kasih\n");
             $printer->text("Barang yang sudah dibeli\n");
             $printer->text("tidak dapat ditukar atau\n");
 			$printer->text("dikembalikan.\n");
-
-            $printer->feed(2);
+            $printer->text("\n");
             $printer->cut();
             $printer->close();
 
