@@ -43,7 +43,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Rp</span>
                             </div>
-                            <input type="text" name="price" class="form-control price @error('price') is-invalid @enderror" data-id="{{ $transaction['id'] }}"
+                            <input type="number" name="price" class="form-control price @error('price') is-invalid @enderror" data-id="{{ $transaction['id'] }}"
                             data-total="{{ $transaction['hargaJual'] }}"
                             value="{{ $transaction['hargaJual'] }}" placeholder="0">
 
@@ -126,39 +126,89 @@
 		})
 
         let debounceTimer;
-        $('.transaction-table').on('input', '.price', function () {
-            // const newPrice = parseInt(this.value.replace(/\D/g, ''), 10);
-            // const { id } = $(this).data();
 
-            // if (newPrice && newPrice > 0) {
-            //     Livewire.emit('update-price', id, newPrice);
-            // } else {
-            //     $(this).addClass('is-invalid');
-            //     $(this).siblings('.invalid-feedback').html('Harga tidak valid');
-            // }
-
-            clearTimeout(debounceTimer);
+$('.transaction-table').on('input', '.price', function () {
+    clearTimeout(debounceTimer);
     const $input = $(this);
-    debounceTimer = setTimeout(() => {
-        const newPrice = parseInt($input.val().replace(/\D/g, ''), 10);
-        const { id } = $input.data();
+    const { id } = $input.data();
+    let newPrice = $input.val();
 
-        if (newPrice && newPrice > 0) {
-            Livewire.emit('update-price', id, newPrice);
-            $input.removeClass('is-invalid');
-        } else {
-            $input.addClass('is-invalid');
-            $input.siblings('.invalid-feedback').html('Harga tidak valid');
+    // Hanya hapus karakter yang bukan angka tanpa mengganti keseluruhan nilai
+    let filteredPrice = newPrice.replace(/[^0-9]/g, '');
+    if (newPrice !== filteredPrice) {
+        let caretPos = $input[0].selectionStart;
+        $input.val(filteredPrice);
+        $input[0].setSelectionRange(caretPos, caretPos);
+    }
+
+    debounceTimer = setTimeout(() => {
+        if (filteredPrice.trim() !== '') {
+            let currentPrice = parseInt(filteredPrice, 10);
+            if (!isNaN(currentPrice)) {
+                Livewire.emit('update-price', id, currentPrice);
+                $input.data('total', filteredPrice); // Update nilai total agar tidak kembali ke nilai awal
+            }
         }
     }, 500);
-        });
+});
 
-        $('.transaction-table').on('focusout', '.price', function () {
-            if ($(this).hasClass('is-invalid')) {
-                this.value = $(this).data('total'); // Mengembalikan harga awal jika invalid
-                $(this).removeClass('is-invalid');
-            }
-        });
+$('.transaction-table').on('focusout', '.price', function () {
+    const $input = $(this);
+    let newPrice = $input.val();
+    let filteredPrice = newPrice.replace(/[^0-9]/g, '');
+
+    if (newPrice !== filteredPrice) {
+        $input.val(filteredPrice);
+    }
+    if (filteredPrice.trim() !== '') {
+        let currentPrice = parseInt(filteredPrice, 10);
+        if (!isNaN(currentPrice)) {
+            Livewire.emit('update-price', $input.data('id'), currentPrice);
+            $input.data('total', filteredPrice); // Update nilai total saat focusout agar tidak revert
+        }
+    } else {
+        $input.val($input.data('total'));
+    }
+});
+
+
+
+
+
+    //     let debounceTimer;
+    //     $('.transaction-table').on('input', '.price', function () {
+    //         // const newPrice = parseInt(this.value.replace(/\D/g, ''), 10);
+    //         // const { id } = $(this).data();
+
+    //         // if (newPrice && newPrice > 0) {
+    //         //     Livewire.emit('update-price', id, newPrice);
+    //         // } else {
+    //         //     $(this).addClass('is-invalid');
+    //         //     $(this).siblings('.invalid-feedback').html('Harga tidak valid');
+    //         // }
+
+    //         clearTimeout(debounceTimer);
+    // const $input = $(this);
+    // debounceTimer = setTimeout(() => {
+    //     const newPrice = parseInt($input.val().replace(/\D/g, ''), 10);
+    //     const { id } = $input.data();
+
+    //     if (newPrice && newPrice > 0) {
+    //         Livewire.emit('update-price', id, newPrice);
+    //         $input.removeClass('is-invalid');
+    //     } else {
+    //         $input.addClass('is-invalid');
+    //         $input.siblings('.invalid-feedback').html('Harga tidak valid');
+    //     }
+    // }, 500);
+    //     });
+
+    //     $('.transaction-table').on('focusout', '.price', function () {
+    //         if ($(this).hasClass('is-invalid')) {
+    //             this.value = $(this).data('total'); // Mengembalikan harga awal jika invalid
+    //             $(this).removeClass('is-invalid');
+    //         }
+    //     });
 
 	})
 </script>

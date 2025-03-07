@@ -135,7 +135,7 @@ class TransactionController extends Controller
 
             $printer->text("Instagram : \n");
             $printer->text("@bengkulu_guitar\n");
-            $printer->text("@bengkulupro_audio \n");
+            $printer->text("@bengkulupro_audio\n");
             $printer->text("\n");
             $printer->text("Terima Kasih\n");
             $printer->text("Barang yang sudah dibeli\n");
